@@ -1,10 +1,33 @@
 {
-  "id": "plugin.com.pot-app.lingva",
+  "id": "plugin.com.gaivrt.gemini", 
   "plugin_type": "translate",
-  "icon": "lingva.svg",
-  "display": "Lingva",
-  "homepage": "https://github.com/pot-app/pot-app-translate-plugin-template",
-  "needs": [{ "key": "requestPath", "display": "请求地址" }],
+  "icon": "gemini.svg", 
+  "display": "Google Gemini", 
+  "homepage": "https://github.com/gaivrt/pot-app-translate-plugin-gemini", 
+  "needs": [ 
+    {
+      "key": "apiKey",
+      "display": "Gemini API Key",
+      "type": "input"
+    },
+    {
+    "key": "modelName",
+    "display": "Model Name",
+    "type": "input",
+    "default": "gemini-2.0-flash"
+    },
+    { 
+      "key": "enableStreaming",
+      "display": "启用流式输出",
+      "type": "select", 
+      "options": { 
+        "false": "否 (No)", 
+        "true": "是 (Yes)"  
+      },
+      "default": "false" 
+    }
+  ],
+  
   "language": {
     "auto": "auto",
     "zh_cn": "zh",

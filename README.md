@@ -1,101 +1,75 @@
-# Pot-App 翻译插件模板仓库 (以 [Lingva](https://github.com/TheDavidDelta/lingva-translate) 为例)
+# Pot-App Google Gemini 翻译插件
 
-### 此仓库为模板仓库，编写插件时可以直接由此仓库创建插件仓库
+这是一款为 [Pot-App](https://github.com/pot-app/pot-app) 开发的翻译插件，利用强大的 Google Gemini API 提供高质量、可定制的文本翻译服务。
 
-## 插件编写指南
+## 主要功能
 
-### 1. 插件仓库创建
+*   **Gemini API 驱动**: 利用 Google 先进的 AI 模型进行翻译。
+*   **模型选择**: 支持用户自行指定使用的 Gemini 模型（例如 `gemini-1.5-pro-latest`, `gemini-1.5-flash-latest` 等），默认为 `gemini-2.0-flash` (**请注意**: 请确保此模型在您的区域可用且已被 Google 正式发布)。
+*   **自定义系统指令 (System Prompt)**: 允许用户添加自定义指令来引导 Gemini 的翻译风格、语气或特定要求。
+*   **流式输出**: 可选开启流式输出，让翻译结果逐步显示，提供更即时的反馈。
+*   **多语言支持**: 利用 Gemini 的多语言能力，支持 Pot-App 中定义的多种语言对。
 
-- 以此仓库为模板创建一个新的仓库
-- 仓库名为 `pot-app-translate-plugin-<插件名>`，例如 `pot-app-translate-plugin-lingva`
+## 配置指南
 
-### 2. 插件信息配置
+在使用此插件前，您需要在 Pot-App 的插件设置中进行配置：
 
-编辑 `info.json` 文件，修改以下字段：
+1.  **安装插件**: 下载 `.potext` 文件，并在 Pot-App 的设置 -> 插件 -> 安装本地插件处进行安装。
+2.  **进入配置**: 在 Pot-App 设置 -> 翻译 -> 服务提供方 中找到 "Google Gemini"，点击配置按钮。
 
-- `id`：插件唯一 id，必须以`plugin`开头，例如 `plugin.com.pot-app.lingva`
-- `homepage`: 插件主页，填写你的仓库地址即可，例如 `https://github.com/pot-app/pot-app-translate-plugin-template`
-- `display`: 插件显示名称，例如 `Lingva`
-- `icon`: 插件图标，例如 `lingva.svg`
-- `needs`: 插件依赖，一个数组，每个依赖为一个对象，包含以下字段：
-  - `key`: 依赖 key，对应该项依赖在配置文件中的名称，例如 `requestPath`
-  - `display`: 依赖显示名称，对应用户显示的名称，例如 `请求地址`
-  - `type`: 组件类型 `input` | `select`
-  - `options`: 选项列表(仅 select 组件需要)，例如 `{"engine_a":"Engina A","engine_b":"Engina B"}`
-- `language`: 插件支持的语言映射，将 pot 的语言代码和插件发送请求时的语言代码一一对应
+您需要配置以下选项：
 
-### 3. 插件编写
+*   ### Gemini API Key
+    *   **作用**: 用于认证您的 API 请求。
+    *   **获取**: 您需要前往 [Google AI Studio](https://aistudio.google.com/app/apikey) 或 Google Cloud Console 创建并获取您的 API 密钥。
+    *   **注意**: API Key 是敏感信息，请妥善保管，切勿泄露或分享。
 
-编辑 `main.js` 实现 `translate` 函数
+*   ### Gemini 模型名称
+    *   **作用**: 指定调用哪个 Gemini 模型进行翻译。
+    *   **默认值**: `gemini-2.0-flash`
+    *   **说明**: 您可以根据需求修改为其他可用的 Gemini 模型，例如 `gemini-1.5-pro-latest` (质量更高，可能稍慢) 或 `gemini-1.5-flash-latest` (速度更快)。
+    *   **重要**: 请确保您填写的模型名称是 Google Gemini API 当前支持的有效名称，并且在您所在的区域可用。否则 API 调用会失败。请参考 [Google AI 官方文档](https://ai.google.dev/models/gemini) 获取可用模型列表。
 
-#### 输入参数
+*   ### 自定义系统指令 (System Prompt)
+    *   **作用**: (可选) 在发送给 Gemini 的翻译请求前添加一段自定义指令，用以影响翻译行为。
+    *   **示例**:
+        *   `请使用正式、专业的语气进行翻译。`
+        *   `Translate the text into modern standard {target_language}. Keep the translation concise.` (可以使用 `{target_language}` 这样的占位符，但插件目前**未**实现自动替换，这里仅为示例想法)
+        *   `将结果翻译成中文，并尽可能保留原始文本的段落格式。`
+    *   **默认值**: 空 (不添加任何自定义指令)
 
-```javascript
-// config: config map
-// detect: detected source language
-// setResult: function to set result text
-// utils: some tools
-//     http: tauri http module
-//     readBinaryFile: function
-//     readTextFile: function
-//     Database: tauri Database class
-//     CryptoJS: CryptoJS module
-//     cacheDir: cache dir path
-//     pluginDir: current plugin dir 
-//     osType: "Windows_NT" | "Darwin" | "Linux"
-async function translate(text, from, to, options) {
-  const { config, detect, setResult, utils } = options;
-  const { http, readBinaryFile, readTextFile, Database, CryptoJS, run, cacheDir, pluginDir, osType } = utils;
-  const { fetch, Body } = http;
-}
-```
+*   ### 启用流式输出
+    *   **作用**: 控制翻译结果的返回方式。
+    *   **选项**:
+        *   `否 (No)`: (默认) 等待 Gemini 完成全部翻译后，一次性显示结果。
+        *   `是 (Yes)`: 开启流式输出，翻译结果会随着 API 返回逐步显示出来。
+    *   **说明**: 流式输出可以提供更快的初始反馈，但最终结果需要等待传输完成。
 
-#### 返回值
+## 使用方法
 
-```javascript
-// 文本翻译直接返回字符串
-return "result";
-// 流式输出使用options中的setResult函数
-setResult("result");
-```
+1.  完成插件的安装和配置。
+2.  在 Pot-App 的翻译设置中，选择 "Google Gemini" 作为您的活动翻译服务之一。
+3.  像往常一样使用 Pot-App 的划词翻译、截图翻译或输入翻译功能即可。
 
-词典返回 json 示例：
+## 注意事项
 
-```json
-{
-  "pronunciations": [
-    {
-      "region": "", // 地区
-      "symbol": "", // 音标
-      "voice": [u8] // 语音字节数组
-    }
-  ],
-  "explanations": [
-    {
-      "trait": "", // 词性
-      "explains": [""] // 释义
-    }
-  ],
-  "associations": [""], // 联想/变形
-  "sentence": [
-    {
-      "source": "", // 原文
-      "target": "" // 译文
-    }
-  ]
-}
-```
+*   **API 费用**: 使用 Google Gemini API 可能会产生费用。请查阅 [Google AI 定价页面](https://ai.google.dev/pricing) 了解详细信息，并根据需要设置预算提醒。
+*   **模型可用性**: `gemini-2.0-flash` 或您指定的任何模型名称必须是 Google 官方支持且在您账户和区域内可用的。如果遇到模型找不到的错误，请检查模型名称拼写和可用性。
+*   **系统指令效果**: 自定义系统指令的效果取决于模型的理解能力和您指令的清晰度，可能需要多次尝试才能达到预期效果。过于复杂的指令可能导致翻译质量下降或无结果。
+*   **流式输出体验**: 流式输出是基于 API 返回的数据块进行更新的，其“流畅度”取决于网络状况和 API 的响应速度。
 
-### 4. 打包 pot 插件
+## 开发与构建 (可选，如果你想让其他人基于你的代码开发)
 
-1. 将 `main.js` 文件和 `info.json` 以及图标文件压缩为 zip 文件。
+*   此插件基于 [Pot-App 翻译插件模板仓库](https://github.com/pot-app/pot-app-translate-plugin-template) 构建。
+*   主要逻辑在 `main.js` 中实现，插件信息和配置定义在 `info.json`。
+*   **构建**: 将 `main.js`, `info.json` 和图标文件 (`gemini.svg`) 打包成一个 ZIP 压缩文件，然后将后缀名 `.zip` 修改为 `.potext` 即可得到 Pot-App 插件包。例如：`plugin.com.yourname.gemini.potext`。
+*   本仓库可能配置了 GitHub Actions 以自动打包发布版本（如果沿用了模板的 Actions）。
 
-2. 将文件重命名为`<插件id>.potext`，例如`plugin.com.pot-app.lingva.potext`,即可得到 pot 需要的插件。
+## 许可证 (选择一个)
 
-## 自动编译打包
+例如:
+[MIT License](LICENSE)
 
-本仓库配置了 Github Actions，可以实现推送后自动编译打包插件。
+---
 
-每次将仓库推送到 GitHub 之后 actions 会自动运行，将打包好的插件上传到 artifact，在 actions 页面可以下载
-
-每次提交 Tag 之后，actions 会自动运行，将打包好的插件上传到 release，在 release 页面可以下载打包好的插件
+请将 `plugin.com.yourname.gemini` 中的 `yourname` 替换为你的用户名或标识符，并根据你的实际情况（例如仓库地址、许可证选择）修改 `README.md` 文件。
