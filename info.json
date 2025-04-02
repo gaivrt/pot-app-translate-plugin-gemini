@@ -1,5 +1,5 @@
 {
-  "id": "plugin.com.gaivrt.gemini", 
+  "id": "plugin.io.github.gaivrt.gemini", 
   "plugin_type": "translate",
   "icon": "gemini.svg", 
   "display": "Google Gemini", 
