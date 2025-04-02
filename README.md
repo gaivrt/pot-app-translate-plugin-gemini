@@ -58,18 +58,13 @@
 *   **系统指令效果**: 自定义系统指令的效果取决于模型的理解能力和您指令的清晰度，可能需要多次尝试才能达到预期效果。过于复杂的指令可能导致翻译质量下降或无结果。
 *   **流式输出体验**: 流式输出是基于 API 返回的数据块进行更新的，其“流畅度”取决于网络状况和 API 的响应速度。
 
-## 开发与构建 (可选，如果你想让其他人基于你的代码开发)
+## 开发与构建 
 
 *   此插件基于 [Pot-App 翻译插件模板仓库](https://github.com/pot-app/pot-app-translate-plugin-template) 构建。
 *   主要逻辑在 `main.js` 中实现，插件信息和配置定义在 `info.json`。
 *   **构建**: 将 `main.js`, `info.json` 和图标文件 (`gemini.svg`) 打包成一个 ZIP 压缩文件，然后将后缀名 `.zip` 修改为 `.potext` 即可得到 Pot-App 插件包。例如：`plugin.com.yourname.gemini.potext`。
-*   本仓库可能配置了 GitHub Actions 以自动打包发布版本（如果沿用了模板的 Actions）。
+*   本仓库可能配置了 GitHub Actions 以自动打包发布版本。
 
-## 许可证 (选择一个)
+## 许可证
 
-例如:
-[MIT License](LICENSE)
-
----
-
-请将 `plugin.com.yourname.gemini` 中的 `yourname` 替换为你的用户名或标识符，并根据你的实际情况（例如仓库地址、许可证选择）修改 `README.md` 文件。
+[GPL-3.0 license](LICENSE)
