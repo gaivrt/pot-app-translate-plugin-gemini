@@ -16,15 +16,11 @@
     "type": "input",
     "default": "gemini-2.0-flash"
     },
-    { 
-      "key": "enableStreaming",
-      "display": "启用流式输出",
-      "type": "select", 
-      "options": { 
-        "false": "否 (No)", 
-        "true": "是 (Yes)"  
-      },
-      "default": "false" 
+    {
+      "key": "systemPrompt",
+      "display": "自定义系统指令",
+      "type": "input",
+      "default": ""
     }
   ],
   
