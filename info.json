@@ -20,9 +20,9 @@
       "key": "systemPrompt",
       "display": "自定义系统指令",
       "type": "input",
-      "default": ""
+      "default": "You are a faithful, expressive, and elegant translator. Output ONLY the translated text, without any introductory phrases, explanations, or markdown formatting like quotes or code blocks.\n"
     }
-  ],
+    ],
   
   "language": {
     "auto": "auto",
